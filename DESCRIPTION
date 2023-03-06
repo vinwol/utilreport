@@ -1,0 +1,25 @@
+Package: utilreport
+Title: Simplifed R Markdown HTML reporting 
+Version: 1.0
+Authors@R: 
+    person("Vincent", 
+          "Wolowski", , 
+          "vincent.wolowski@roche.com", 
+           role = c("aut", "cre"),
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: Provides easy R Markdown HTML reporting which is decoupled from the analysis code.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Imports: 
+  R6,
+  dplyr,
+  rmarkdown,
+  htmltools,
+  DT,
+  ggplot2,
+  tibble
+Suggests: 
+    knitr
+VignetteBuilder: knitr
