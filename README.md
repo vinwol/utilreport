@@ -4,12 +4,12 @@ R package for easy R Markdown HTML reporting which is decoupled from the analysi
 
 Installation: 
 <br>
-remotes::install_git("https://github.roche.com/wolowskv/utilreport")
+remotes::install_git("https://github.com/vinwol/utilreport")
 
 Package Website: 
 <br>
-https://pages.github.roche.com/wolowskv/utilreport/index.html
+https://pages.github.com/vinwol/utilreport/index.html
 
 How to use utilreport:
 <br>
-https://pages.github.roche.com/wolowskv/utilreport/articles/Howto.html
+https://pages.github.com/vinwol/utilreport/articles/Howto.html
