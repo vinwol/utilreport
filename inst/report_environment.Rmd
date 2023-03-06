@@ -1,0 +1,145 @@
+---
+params:
+  reporter:
+    value: x
+  report_title: 
+    value: x
+  report_author: 
+    value: x
+title: '`r params$report_title`'
+author: '`r params$report_author`'
+date: '`r format(Sys.time(), "%d %B, %Y")`'
+output: 
+  html_document:
+    self_contained: true
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    number_sections: false
+    theme: lumen
+---
+
+   
+```{css zoom-lib-src, echo = FALSE}
+script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
+```
+
+```{js zoom-jquery, echo = FALSE}
+// Source: https://stackoverflow.com/questions/56361986/zoom-function-in-rmarkdown-html-plot
+$(document).ready(function() {
+    $('body').prepend('<div class=\"zoomDiv\"><img src=\"\" class=\"zoomImg\"></div>');
+    // onClick function for all plots (img's)
+    $('img:not(.zoomImg)').click(function() {
+      $('.zoomImg').attr('src', $(this).attr('src')).css({width: '150%'});
+      $('.zoomDiv').css({opacity: '1', width: 'auto', border: '1px solid white', 
+      borderRadius: '5px', position: 'fixed', top: '50%', left: '50%', 
+      marginRight: '-50%', transform: 'translate(-50%, -50%)', 
+      boxShadow: '0px 0px 50px #888888', zIndex: '50', overflow: 'auto', 
+    maxHeight: '100%'});
+});
+// onClick function for zoomImg
+$('img.zoomImg').click(function() {
+    $('.zoomDiv').css({opacity: '0', width: '0%'}); 
+});
+});
+```
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      cache = FALSE,
+                      eval = TRUE,
+                      error = TRUE,
+                      warning = FALSE,
+                      message = FALSE)
+library(knitr)
+library(DT)
+library(htmltools)
+library(tibble)
+library(ggplot2)
+library(plotly)
+library(heatmaply)
+library(devtools)
+library(kableExtra)
+library(utilreport)
+# Need to load once up front for some dependencies (extensions and plugins need additional resources).
+datatable(iris, extensions = "Buttons")
+heatmaply(mtcars)
+p <- ggplot(mtcars, aes(mpg, wt)) + geom_point()
+```
+
+```{r reporter, include = FALSE}
+reporter <- params$reporter
+parameter_list <- reporter$get_parameter_list()
+flag_show_section_params <- FALSE
+if (length(parameter_list) > 0) {
+  flag_show_section_params <- TRUE
+}  
+```
+
+## R environment session info
+
+```{r, echo = FALSE, eval = TRUE, results = 'asis', out.width = '100%', out.height = '100%'}
+df_session_platform <- devtools::session_info()$platform %>% 
+  unlist(.) %>% 
+  as.data.frame(.) %>% 
+  tibble::rownames_to_column(.)
+colnames(df_session_platform) <- c("Setting", "Value")
+htmltools::tagList(DT::datatable(data = df_session_platform, 
+                                 width = 1000, 
+                                 height = 800, 
+                                 extensions = 'Buttons',
+                                 options = list(scrollX = TRUE, 
+                                                scrollY = '400px', 
+                                                scrollCollapse = TRUE,
+                                                dom = 'Blfrtip',
+                                                buttons = c('csv')
+                                                )
+                                 ))
+```
+
+<div style="margin-top:0px; margin-bottom:-290px;"></div>
+
+## Used R packages 
+
+```{r, echo = FALSE, eval = TRUE, results = 'asis', out.width = '100%', out.height = '100%'}
+df_session_packages <- devtools::session_info()$packages %>% 
+  as.data.frame(.) %>% 
+  dplyr::filter(attached == TRUE) %>% 
+  dplyr::select(loadedversion, date) %>% 
+  tibble::rownames_to_column(.)
+colnames(df_session_packages) <- c("Package", "Loaded Version", "Date")
+htmltools::tagList(DT::datatable(data = df_session_packages, 
+                                 width = 1000, 
+                                 height = 800, 
+                                 extensions = 'Buttons',
+                                 options = list(scrollX = TRUE, 
+                                                scrollY = '400px', 
+                                                scrollCollapse = TRUE,
+                                                dom = 'Blfrtip',
+                                                buttons = c('csv')
+                                                )
+                                 ))
+```
+
+<div style="margin-top:0px; margin-bottom:-290px;"></div>
+
+```{r, echo = FALSE, eval = flag_show_section_params, results = 'asis', out.width = '100%', out.height = '100%'}
+knitr::asis_output("## Used methods and parameters") 
+parameters_and_methods <- names(parameter_list)
+values <- unlist(unname(parameter_list))
+df <- data.frame(p=parameters_and_methods, v=values)
+colnames(df) <- c("Methods and Parameters", "Value")
+htmltools::tagList(DT::datatable(data = df, 
+                                   width = 1000, 
+                                   height = 800, 
+                                   extensions = 'Buttons',
+                                   options = list(scrollX = TRUE, 
+                                                  scrollY = '400px', 
+                                                  scrollCollapse = TRUE,
+                                                  dom = 'Blfrtip',
+                                                  buttons = c('csv')
+                                                  )
+                                   )) 
+``` 
+ 
