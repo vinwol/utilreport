@@ -4,7 +4,7 @@ R package for easy R Markdown HTML reporting which is decoupled from the analysi
 
 Installation: 
 <br>
-remotes::install_git("https://github.com/vinwol/utilreport")
+devtools::install_github("https://github.com/vinwol/utilreport")
 
 # Overview
 
